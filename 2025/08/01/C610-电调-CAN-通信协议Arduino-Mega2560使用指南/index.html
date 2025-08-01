@@ -28,7 +28,7 @@
 <meta property="og:description" content="C610电调CAN通信协议及使用指南基本信息及资料 通信协议：C610电调采用CAN通信协议 协议参考文档：40. CAN—通讯实验 — [野火]STM32 HAL库开发实战指南——基于H743_Pro_V 硬件适配：Arduino Mega2560无CAN差分信号引脚，需外接MCP2515（实现CAN差分信号与SPI信号转换） 推荐库：GitHub - autowp&#x2F;arduino-m">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-08-01T07:39:25.000Z">
-<meta property="article:modified_time" content="2025-08-01T07:40:28.322Z">
+<meta property="article:modified_time" content="2025-08-01T08:23:18.231Z">
 <meta property="article:author" content="饭饭-Fantety">
 <meta name="twitter:card" content="summary">
   
@@ -222,7 +222,7 @@
   
           </div>
           <div class="wordcount need-seperator meta-info">
-            784 词 
+            1.1k 词 
           </div>
         </div>
         
@@ -235,9 +235,107 @@
 <li><strong>硬件适配</strong>：Arduino Mega2560无CAN差分信号引脚，需外接MCP2515（实现CAN差分信号与SPI信号转换）</li>
 <li><strong>推荐库</strong>：<a target="_blank" rel="noopener" href="https://github.com/autowp/arduino-mcp2515">GitHub - autowp&#x2F;arduino-mcp2515</a>（Arduino MCP2515 CAN接口库）</li>
 </ul>
-<blockquote>
-<p>注：文档中包含接线示意图，实际使用时需补充对应硬件连接图</p>
-</blockquote>
+<h2 id="报文接收格式"><a href="#报文接收格式" class="headerlink" title="报文接收格式"></a>报文接收格式</h2><p>用于向电调发送控制指令控制电调的电流输出,两个标识符(0x200和0x1FF)各自对应 控制4个ID的电调。控制转矩电流值范围-10000<del>0</del>10000,对应电调输出的转矩电流 范围-10<del>0</del>10A。</p>
+<p>即0x200用于控制1-4号电调</p>
+<table>
+<thead>
+<tr>
+<th>数据域</th>
+<th>内容</th>
+<th>电调ID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DATA[0]</td>
+<td>控制电流值高8位</td>
+<td>1</td>
+</tr>
+<tr>
+<td>DATA[1]</td>
+<td>控制电流值低8位</td>
+<td>1</td>
+</tr>
+<tr>
+<td>DATA[2]</td>
+<td>控制电流值高8位</td>
+<td>2</td>
+</tr>
+<tr>
+<td>DATA[3]</td>
+<td>控制电流值低8位</td>
+<td>2</td>
+</tr>
+<tr>
+<td>DATA[4]</td>
+<td>控制电流值高8位</td>
+<td>3</td>
+</tr>
+<tr>
+<td>DATA[5]</td>
+<td>控制电流值低8位</td>
+<td>3</td>
+</tr>
+<tr>
+<td>DATA[6]</td>
+<td>控制电流值高8位</td>
+<td>4</td>
+</tr>
+<tr>
+<td>DATA[7]</td>
+<td>控制电流值低8位</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<p>0x1FF用于控制5-8号电调</p>
+<table>
+<thead>
+<tr>
+<th>数据域</th>
+<th>内容</th>
+<th>电调ID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DATA[0]</td>
+<td>控制电流值高8位</td>
+<td>5</td>
+</tr>
+<tr>
+<td>DATA[1]</td>
+<td>控制电流值低8位</td>
+<td>5</td>
+</tr>
+<tr>
+<td>DATA[2]</td>
+<td>控制电流值高8位</td>
+<td>6</td>
+</tr>
+<tr>
+<td>DATA[3]</td>
+<td>控制电流值低8位</td>
+<td>6</td>
+</tr>
+<tr>
+<td>DATA[4]</td>
+<td>控制电流值高8位</td>
+<td>7</td>
+</tr>
+<tr>
+<td>DATA[5]</td>
+<td>控制电流值低8位</td>
+<td>7</td>
+</tr>
+<tr>
+<td>DATA[6]</td>
+<td>控制电流值高8位</td>
+<td>8</td>
+</tr>
+<tr>
+<td>DATA[7]</td>
+<td>控制电流值低8位</td>
+<td>8</td>
+</tr>
+</tbody></table>
 <h2 id="报文反馈格式"><a href="#报文反馈格式" class="headerlink" title="报文反馈格式"></a>报文反馈格式</h2><h3 id="数据域定义"><a href="#数据域定义" class="headerlink" title="数据域定义"></a>数据域定义</h3><table>
 <thead>
 <tr>
@@ -278,6 +376,7 @@
 <td>Null</td>
 </tr>
 </tbody></table>
+<p>接收数据时的CANID若为<code>0x201</code>则为ID为1的电调的数据，以此类推。<br>若是ID为<code>0x1FF+ID</code>则为ID为5-8的电调的数据。</p>
 <h3 id="关键参数"><a href="#关键参数" class="headerlink" title="关键参数"></a>关键参数</h3><ul>
 <li>发送频率：默认1KHz（可通过RoboMaster Assistant软件修改）</li>
 <li>转子机械角度范围：0<del>8191（对应物理角度0</del>360°）</li>
