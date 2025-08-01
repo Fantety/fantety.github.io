@@ -156,6 +156,11 @@
           <div class="archive-count">1 </div>
         </a>
       
+        <a class="archive-link" href="/archives/2022/04 ">
+          四月 2022 
+          <div class="archive-count">1 </div>
+        </a>
+      
         <a class="archive-link" href="/archives/2021/04 ">
           四月 2021 
           <div class="archive-count">1 </div>
@@ -175,6 +180,12 @@
           <a class="recent-link" href="/2025/08/01/C610-%E7%94%B5%E8%B0%83-CAN-%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AEArduino-Mega2560%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="C610 电调 CAN 通信协议Arduino Mega2560使用指南" >
             <div class="recent-link-text">
               C610 电调 CAN 通信协议Arduino Mega2560使用指南
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2022/04/30/Makefile-%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/" title="Makefile 入门：从基础到实用技巧" >
+            <div class="recent-link-text">
+              Makefile 入门：从基础到实用技巧
             </div>
           </a>
         
@@ -289,6 +300,84 @@ DATA[5]
     <a class="right-panel  non-pic  "
       
       href="/2025/08/01/C610-%E7%94%B5%E8%B0%83-CAN-%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AEArduino-Mega2560%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" 
+    >
+       
+      <i class="fa-solid fa-angle-right non-pic"></i>
+       
+    </a>
+     
+  </div>
+  
+</article>
+
+ 
+
+   
+
+<article id="post-Makefile-入门：从基础到实用技巧" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 itemprop="name">
+        <a class="p-name article-title" href="/2022/04/30/Makefile-%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/">Makefile 入门：从基础到实用技巧</a>
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2022-04-30T01:59:14.000Z" itemprop="datePublished">2022-04-30</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+    未分类 
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            1.1k 词 
+          </div>
+        </div>
+        
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <div class="truncate-text">
+            Makefile 入门：从基础到实用技巧一、为什么需要Makefile？简单说，Makefile是「编译规则说明书」。一个工程可能有几十上百个源文件，按功能放在不同目录里。Makefile定义了：
+
+哪些文件先编译，哪些后编译
+哪些文件修改后需要重新编译
+甚至可以执行打包、备份等额外操作
+
+有了Makefile，只需敲一个make命令，整个工程就会自动编译，极大提高开发效率。
+二、先搞懂：编译和链接在讲Makefile之前，先明确两个基本概念：
+
+编译（compile）：把源代码（.c&#x2F;.cpp）变成中间目标文件（Unix下是.o，Windows下是.obj）。编译器只检查语法和函数&#x2F;变量是否声明。
+链接（link）：把一堆中间目标文件拼成可执行文件。链接器找函数的实现，找不到就会报错（比如VC里的Link 2001）。
+
+举个例子：main.c编译成main.o，tool.c编译成tool.o，最后链接成app可执行文件。
+三、Makefile 基本规则Makefile的核心是「依赖关系」和「执行命令」，格式如下：
+123目标（target）... : 依赖...  
+          </div>
+        
+      </div>
+
+         
+    </div>
+    
+     
+    <a class="right-panel  non-pic  "
+      
+      href="/2022/04/30/Makefile-%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/" 
     >
        
       <i class="fa-solid fa-angle-right non-pic"></i>
