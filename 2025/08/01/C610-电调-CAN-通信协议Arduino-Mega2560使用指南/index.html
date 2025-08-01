@@ -28,7 +28,7 @@
 <meta property="og:description" content="C610电调CAN通信协议及使用指南基本信息及资料 通信协议：C610电调采用CAN通信协议 协议参考文档：40. CAN—通讯实验 — [野火]STM32 HAL库开发实战指南——基于H743_Pro_V 硬件适配：Arduino Mega2560无CAN差分信号引脚，需外接MCP2515（实现CAN差分信号与SPI信号转换） 推荐库：GitHub - autowp&#x2F;arduino-m">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-08-01T07:39:25.000Z">
-<meta property="article:modified_time" content="2025-08-01T08:23:18.231Z">
+<meta property="article:modified_time" content="2025-08-01T08:25:45.726Z">
 <meta property="article:author" content="饭饭-Fantety">
 <meta name="twitter:card" content="summary">
   
@@ -235,7 +235,7 @@
 <li><strong>硬件适配</strong>：Arduino Mega2560无CAN差分信号引脚，需外接MCP2515（实现CAN差分信号与SPI信号转换）</li>
 <li><strong>推荐库</strong>：<a target="_blank" rel="noopener" href="https://github.com/autowp/arduino-mcp2515">GitHub - autowp&#x2F;arduino-mcp2515</a>（Arduino MCP2515 CAN接口库）</li>
 </ul>
-<h2 id="报文接收格式"><a href="#报文接收格式" class="headerlink" title="报文接收格式"></a>报文接收格式</h2><p>用于向电调发送控制指令控制电调的电流输出,两个标识符(0x200和0x1FF)各自对应 控制4个ID的电调。控制转矩电流值范围-10000<del>0</del>10000,对应电调输出的转矩电流 范围-10<del>0</del>10A。</p>
+<h2 id="报文接收格式"><a href="#报文接收格式" class="headerlink" title="报文接收格式"></a>报文接收格式</h2><p>用于向电调发送控制指令控制电调的电流输出,两个标识符(0x200和0x1FF)各自对应 控制4个ID的电调。控制转矩电流值范围-10000-0-10000,对应电调输出的转矩电流 范围-10-0-10A。</p>
 <p>即0x200用于控制1-4号电调</p>
 <table>
 <thead>
