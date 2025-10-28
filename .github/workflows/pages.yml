@@ -22,9 +22,12 @@ jobs:
                   node-version: "20"
             - name: Install Dependencies
               run: npm install
-            - name: Build with clean environment
+            - name: Rebuild native modules and build
               run: |
-                # Clean cache and rebuild
+                # Remove problematic native module and reinstall
+                rm -rf node_modules/hexo-word-counter
+                npm install hexo-word-counter
+                # Clean and rebuild
                 rm -rf db.json
                 node node_modules/hexo/bin/hexo clean
                 node node_modules/hexo/bin/hexo generate
