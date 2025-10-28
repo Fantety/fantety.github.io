@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+
+<html theme="dark" showBanner="true" hasBanner="true" > 
+<link href="/fontawesome/css/fontawesome.css" rel="stylesheet">
+<link href="/fontawesome/css/brands.css" rel="stylesheet">
+<link href="/fontawesome/css/solid.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+
+  
+  <title>C语言指针到底是个什么东西 | Fantety&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="C语言指针到底是个什么东西指针，恐怕是C语言中最让人又爱又恨的东西。有人觉得它很难懂，但是不得不说，它真的很好用！！！。 指针是什么？—— 本质是地址你可以把指针理解为一种特殊的变量类型——没错，int*、char*本质上都是指针类型。它们的核心功能只有一个：存储内存地址。 先看个最基础的例子： 12345678910#include &lt;stdio.h&gt;int main(int arg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言指针到底是个什么东西">
+<meta property="og:url" content="http://example.com/2021/04/30/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%88%B0%E5%BA%95%E6%98%AF%E4%B8%AA%E4%BB%80%E4%B9%88%E4%B8%9C%E8%A5%BF/index.html">
+<meta property="og:site_name" content="Fantety&#39;s Blog">
+<meta property="og:description" content="C语言指针到底是个什么东西指针，恐怕是C语言中最让人又爱又恨的东西。有人觉得它很难懂，但是不得不说，它真的很好用！！！。 指针是什么？—— 本质是地址你可以把指针理解为一种特殊的变量类型——没错，int*、char*本质上都是指针类型。它们的核心功能只有一个：存储内存地址。 先看个最基础的例子： 12345678910#include &lt;stdio.h&gt;int main(int arg">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-30T09:48:06.000Z">
+<meta property="article:modified_time" content="2025-08-01T09:54:49.775Z">
+<meta property="article:author" content="饭饭-Fantety">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Fantety's Blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="https://foruda.gitee.com/avatar/1702610822901604658/8213288_fantety_1702610822.png">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/assets/bg1.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="shadow   ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>Fantety's Blog </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">Home</a>
+    
+      <a class="nav-dropdown-link" href="/archives">Archives</a>
+    
+      <a class="nav-dropdown-link" href="/about">About</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/assets/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">饭饭-Fantety </div>
+      <div class="dot"></div>
+      <div class="subtitle">虽不能及 心向往之 </div>
+      <div class="link-list">
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/87643009" title="BiliBili"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/Fantety" title="GitHub"><i class="fa-brands fa-github"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+  <div class="sticky">
+    
+      
+
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2025/08 ">
+          八月 2025 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2022/04 ">
+          四月 2022 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2021/04 ">
+          四月 2021 
+          <div class="archive-count">1 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2025/08/01/C610-%E7%94%B5%E8%B0%83-CAN-%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AEArduino-Mega2560%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="C610 电调 CAN 通信协议Arduino Mega2560使用指南" >
+            <div class="recent-link-text">
+              C610 电调 CAN 通信协议Arduino Mega2560使用指南
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2022/04/30/Makefile-%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/" title="Makefile 入门：从基础到实用技巧" >
+            <div class="recent-link-text">
+              Makefile 入门：从基础到实用技巧
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2021/04/30/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%88%B0%E5%BA%95%E6%98%AF%E4%B8%AA%E4%BB%80%E4%B9%88%E4%B8%9C%E8%A5%BF/" title="C语言指针到底是个什么东西" >
+            <div class="recent-link-text">
+              C语言指针到底是个什么东西
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+<article id="post-C语言指针到底是个什么东西" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        C语言指针到底是个什么东西
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2021-04-30T09:48:06.000Z" itemprop="datePublished">2021-04-30</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+    未分类 
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            1.8k 词 
+          </div>
+        </div>
+        
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="C语言指针到底是个什么东西"><a href="#C语言指针到底是个什么东西" class="headerlink" title="C语言指针到底是个什么东西"></a>C语言指针到底是个什么东西</h1><p>指针，恐怕是C语言中最让人又爱又恨的东西。有人觉得它很难懂，但是不得不说，它真的很好用！！！。</p>
+<h2 id="指针是什么？——-本质是地址"><a href="#指针是什么？——-本质是地址" class="headerlink" title="指针是什么？—— 本质是地址"></a>指针是什么？—— 本质是地址</h2><p>你可以把指针理解为一种特殊的变量类型——没错，<code>int*</code>、<code>char*</code>本质上都是指针类型。它们的核心功能只有一个：存储内存地址。</p>
+<p>先看个最基础的例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">123</span>;</span><br><span class="line">    <span class="type">int</span>* pointer = &amp;a;  <span class="comment">// 取a的地址，赋值给指针</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a的值: %d\n&quot;</span>, a);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pointer存储的地址: %p\n&quot;</span>, pointer);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pointer指向的内容: %d\n&quot;</span>, *pointer);  <span class="comment">// *表示&quot;取地址中的值&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果显而易见：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a的值: 123</span><br><span class="line">pointer存储的地址: 0x7ffff91d4d2c  // 每次运行可能不同</span><br><span class="line">pointer指向的内容: 123</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>*pointer</code>就是”解引用”——通过指针存储的地址，找到并取出该地址中存放的数据。</p>
+<h2 id="指针的”无类型”本质"><a href="#指针的”无类型”本质" class="headerlink" title="指针的”无类型”本质"></a>指针的”无类型”本质</h2><p>上面的例子太常规了。要体会到真正的指针，要从”抛开类型限制”开始。</p>
+<p>看这段略有不同的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">123</span>;</span><br><span class="line">    <span class="type">char</span>* pointer = (<span class="type">char</span>*)&amp;a;  <span class="comment">// 这里指针类型变成了char*</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a的值: %d\n&quot;</span>, a);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pointer存储的地址: %p\n&quot;</span>, pointer);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pointer指向的内容: %d\n&quot;</span>, *pointer);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果和之前几乎一样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a的值: 123</span><br><span class="line">pointer存储的地址: 0x7ffff842f12c  // 地址随机分配，和上次不同很正常</span><br><span class="line">pointer指向的内容: 123</span><br></pre></td></tr></table></figure>
+
+<p>这说明什么？<strong>无论指针声明为<code>int*</code>还是<code>char*</code>，它本质上都只是存储一个地址</strong>。类型只是告诉编译器：”我该如何解读这个地址里的数据”。</p>
+<p>如果我们用<code>%c</code>输出<code>*pointer</code>（把123当ASCII码解析）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*pointer对应的字符: &#123;</span><br></pre></td></tr></table></figure>
+
+<p>因为<code>&#123;</code>的ASCII码正好是123——指针存储的地址没变，只是解读方式变了。</p>
+<h2 id="类型影响什么？——-指针的偏移量"><a href="#类型影响什么？——-指针的偏移量" class="headerlink" title="类型影响什么？—— 指针的偏移量"></a>类型影响什么？—— 指针的偏移量</h2><p>既然类型不影响指针存储的地址，那不同类型的指针有什么区别？答案是：<strong>加减运算时的偏移量</strong>。</p>
+<ul>
+<li><code>char*</code>指针：加减1，偏移1个字节（因为<code>char</code>占1字节）</li>
+<li><code>int*</code>指针：加减1，偏移4个字节（在32位环境下，<code>int</code>通常占4字节）</li>
+</ul>
+<p>看这个例子就明白了：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 字符数组：连续存储8个字节</span></span><br><span class="line">    <span class="type">char</span> s[<span class="number">8</span>] = &#123;<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;g&#x27;</span>, <span class="string">&#x27;h&#x27;</span>&#125;;</span><br><span class="line">    <span class="type">int</span>* pointer = (<span class="type">int</span>*)s;  <span class="comment">// 用int*指针指向数组首地址</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> (*pointer)  <span class="comment">// 简单判断（实际应避免用0作为结束符的情况）</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%c\n&quot;</span>, *pointer);  <span class="comment">// 解读4字节中的第一个字符</span></span><br><span class="line">        pointer++;  <span class="comment">// 偏移4个字节</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a  // 指向s[0]</span><br><span class="line">e  // 偏移4字节后指向s[4]</span><br></pre></td></tr></table></figure>
+
+<p>完全符合预期——<code>int*</code>指针每次+1跳过4个字节，正好从第一个字符”a”跳到第五个字符”e”。</p>
+<h2 id="函数也能被指针指？"><a href="#函数也能被指针指？" class="headerlink" title="函数也能被指针指？"></a>函数也能被指针指？</h2><p>C语言中，函数名和数组名一样，本质上都是地址。既然是地址，那普通指针能不能指向函数？</p>
+<p>先看个对比：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">function</span><span class="params">()</span>&#123;&#125;  <span class="comment">// 定义一个空函数</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> (*fp)() = function;  <span class="comment">// 标准函数指针</span></span><br><span class="line">    <span class="type">int</span> *p = (<span class="type">int</span> *)function;  <span class="comment">// 用int*指针指向函数</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;函数指针fp的值: %p\n&quot;</span>, fp);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;普通指针p的值: %p\n&quot;</span>, p);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">函数指针fp的值: 0x7f3722b95149</span><br><span class="line">普通指针p的值: 0x7f3722b95149</span><br></pre></td></tr></table></figure>
+
+<p>两个指针存储的地址完全相同！这说明：<strong>任何指针类型都能存储函数的地址</strong>。</p>
+<p>但别急着高兴，我们来个”骚操作”：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">function</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello Pointer\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    function();  <span class="comment">// 正常调用一次</span></span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> *p = (<span class="type">int</span> *)function;  <span class="comment">// 用int*指向函数</span></span><br><span class="line">    *p = <span class="number">0</span>;  <span class="comment">// 尝试修改函数所在地址的内容</span></span><br><span class="line">    </span><br><span class="line">    function();  <span class="comment">// 再次调用</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span> ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello Pointer</span><br><span class="line">[1]    1127 segmentation fault (core dumped)  ./demo</span><br></pre></td></tr></table></figure>
+
+<p>程序崩溃了！为什么？</p>
+<p>用调试工具查看会发现：函数的机器码存放在只读内存区域（代码段），当我们试图用<code>*p = 0</code>修改时，会触发内存保护机制，导致段错误。这也从侧面证明：<strong>指针确实指向了函数的真实地址</strong>，我们没办法强制进行修改。</p>
+<h2 id="指针与数据的”部分解读”"><a href="#指针与数据的”部分解读”" class="headerlink" title="指针与数据的”部分解读”"></a>指针与数据的”部分解读”</h2><p>指针的类型不仅影响偏移，还决定了”一次读多少字节”。比如<code>short</code>占2字节，<code>int</code>占4字节，当用<code>short*</code>指向<code>int</code>变量时，会只读取低2字节。</p>
+<p>看这个例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">11</span> , b = <span class="number">111111</span>;</span><br><span class="line">    <span class="type">short</span>* p = (<span class="type">short</span>*)&amp;a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a的低2字节: %d\n&quot;</span>, *p);  <span class="comment">// 11在short范围内，正常输出</span></span><br><span class="line">    </span><br><span class="line">    p = (<span class="type">short</span>*)&amp;b;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;b的低2字节: %d\n&quot;</span>, *p);  <span class="comment">// 111111超出short范围，结果&quot;奇怪&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span> ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a的低2字节: 11</span><br><span class="line">b的低2字节: -19961</span><br></pre></td></tr></table></figure>
+
+<p>为什么<code>b</code>的结果是-19961？这涉及到二进制存储和补码规则。<code>111111</code>的二进制超过了2字节（16位），<code>short*</code>只读取低16位，而这16位恰好是-19961的补码（感兴趣的话可以自己换算验证）。</p>
+<h2 id="用指针”解剖”内存：位域实验"><a href="#用指针”解剖”内存：位域实验" class="headerlink" title="用指针”解剖”内存：位域实验"></a>用指针”解剖”内存：位域实验</h2><p>我们可以用指针配合位域，更直观地看内存存储：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">// 定义一个16位的位域结构（模拟short）</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">num</span>&#123;</span></span><br><span class="line">    <span class="type">short</span> a:<span class="number">1</span>,b:<span class="number">1</span>,c:<span class="number">1</span>,d:<span class="number">1</span>,e:<span class="number">1</span>,f:<span class="number">1</span>,g:<span class="number">1</span>,h:<span class="number">1</span>,</span><br><span class="line">          i:<span class="number">1</span>,j:<span class="number">1</span>,k:<span class="number">1</span>,l:<span class="number">1</span>,m:<span class="number">1</span>,n:<span class="number">1</span>,o:<span class="number">1</span>,p:<span class="number">1</span>;  <span class="comment">// 16个1位字段</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">num</span> <span class="title">a</span>;</span></span><br><span class="line">    <span class="comment">// 前15位设为1，最后1位设为0</span></span><br><span class="line">    a.a=a.b=a.c=a.d=a.e=a.f=a.g=a.h=<span class="number">1</span>;</span><br><span class="line">    a.i=a.j=a.k=a.l=a.m=a.n=a.o=<span class="number">1</span>;</span><br><span class="line">    a.p=<span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="type">short</span>* sp = (<span class="type">short</span>*)&amp;a;  <span class="comment">// 用short*读16位</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;16位解读: %d\n&quot;</span>, *sp);  <span class="comment">// 0111111111111111 → 32767</span></span><br><span class="line">    </span><br><span class="line">    <span class="type">char</span>* cp = (<span class="type">char</span>*)&amp;a;  <span class="comment">// 用char*读低8位</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;低8位解读: %d\n&quot;</span>, *cp);  <span class="comment">// 11111111 → -1（补码规则）</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span> ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">16位解读: 32767</span><br><span class="line">低8位解读: -1</span><br></pre></td></tr></table></figure>
+
+<p><strong>指针类型决定了内存的解读方式</strong>——同样的二进制，用16位读是32767，用8位读（且视为有符号数）就是-1。</p>
+<h2 id="指针的”手动分配”技巧"><a href="#指针的”手动分配”技巧" class="headerlink" title="指针的”手动分配”技巧"></a>指针的”手动分配”技巧</h2><p>理解了指针的本质，我们甚至可以手动指定变量的存储区域。比如给结构体”分配”栈上的缓冲区：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">a</span>&#123;</span>&#125;;  <span class="comment">// 空结构体（大小为0，但可以作为指针类型）</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> buffer[<span class="number">128</span>];  <span class="comment">// 栈上的128字节缓冲区</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">a</span>* <span class="title">sa</span> =</span> (<span class="keyword">struct</span> a*)buffer;  <span class="comment">// 让结构体指针指向缓冲区</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 之后操作sa，就相当于操作buffer中的内存</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种技巧在嵌入式开发或需要精确控制内存的场景中很常用。</p>
+<h2 id="总结：指针的核心是”瞎搞”的自由"><a href="#总结：指针的核心是”瞎搞”的自由" class="headerlink" title="总结：指针的核心是”瞎搞”的自由"></a>总结：指针的核心是”瞎搞”的自由</h2><p>C语言指针的魅力，在于它打破了很多”规则”：</p>
+<ul>
+<li>类型不限制存储的地址，只影响解读方式</li>
+<li>任何指针都能指向任何地址（函数、变量、数组…）</li>
+<li>可以手动控制内存的读写范围和方式</li>
+</ul>
+<p>当然，这种自由也伴随着风险，但是不得不说这玩意儿确实很好玩。</p>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2022/04/30/Makefile-%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/"
+      title="Makefile 入门：从基础到实用技巧"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        Makefile 入门：从基础到实用技巧
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right  disabled "
+     >
+
+    <p class="title-text">
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+ 
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2025 饭饭-Fantety<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+</body>
+</html>

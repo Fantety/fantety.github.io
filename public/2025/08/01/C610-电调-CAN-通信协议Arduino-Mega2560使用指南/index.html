@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+
+
+<html theme="dark" showBanner="true" hasBanner="true" > 
+<link href="/fontawesome/css/fontawesome.css" rel="stylesheet">
+<link href="/fontawesome/css/brands.css" rel="stylesheet">
+<link href="/fontawesome/css/solid.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+
+  
+  <title>C610 电调 CAN 通信协议Arduino Mega2560使用指南 | Fantety&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="C610电调CAN通信协议及使用指南基本信息及资料 通信协议：C610电调采用CAN通信协议 协议参考文档：40. CAN—通讯实验 — [野火]STM32 HAL库开发实战指南——基于H743_Pro_V 硬件适配：Arduino Mega2560无CAN差分信号引脚，需外接MCP2515（实现CAN差分信号与SPI信号转换） 推荐库：GitHub - autowp&#x2F;arduino-m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C610 电调 CAN 通信协议Arduino Mega2560使用指南">
+<meta property="og:url" content="http://example.com/2025/08/01/C610-%E7%94%B5%E8%B0%83-CAN-%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AEArduino-Mega2560%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="Fantety&#39;s Blog">
+<meta property="og:description" content="C610电调CAN通信协议及使用指南基本信息及资料 通信协议：C610电调采用CAN通信协议 协议参考文档：40. CAN—通讯实验 — [野火]STM32 HAL库开发实战指南——基于H743_Pro_V 硬件适配：Arduino Mega2560无CAN差分信号引脚，需外接MCP2515（实现CAN差分信号与SPI信号转换） 推荐库：GitHub - autowp&#x2F;arduino-m">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-08-01T07:39:25.000Z">
+<meta property="article:modified_time" content="2025-08-01T08:25:45.726Z">
+<meta property="article:author" content="饭饭-Fantety">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Fantety's Blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="https://foruda.gitee.com/avatar/1702610822901604658/8213288_fantety_1702610822.png">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/assets/bg1.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="shadow   ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>Fantety's Blog </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">Home</a>
+    
+      <a class="nav-dropdown-link" href="/archives">Archives</a>
+    
+      <a class="nav-dropdown-link" href="/about">About</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/assets/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">饭饭-Fantety </div>
+      <div class="dot"></div>
+      <div class="subtitle">虽不能及 心向往之 </div>
+      <div class="link-list">
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/87643009" title="BiliBili"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/Fantety" title="GitHub"><i class="fa-brands fa-github"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+  <div class="sticky">
+    
+      
+
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2025/08 ">
+          八月 2025 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2022/04 ">
+          四月 2022 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2021/04 ">
+          四月 2021 
+          <div class="archive-count">1 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2025/08/01/C610-%E7%94%B5%E8%B0%83-CAN-%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AEArduino-Mega2560%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="C610 电调 CAN 通信协议Arduino Mega2560使用指南" >
+            <div class="recent-link-text">
+              C610 电调 CAN 通信协议Arduino Mega2560使用指南
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2022/04/30/Makefile-%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/" title="Makefile 入门：从基础到实用技巧" >
+            <div class="recent-link-text">
+              Makefile 入门：从基础到实用技巧
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2021/04/30/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%88%B0%E5%BA%95%E6%98%AF%E4%B8%AA%E4%BB%80%E4%B9%88%E4%B8%9C%E8%A5%BF/" title="C语言指针到底是个什么东西" >
+            <div class="recent-link-text">
+              C语言指针到底是个什么东西
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+<article id="post-C610-电调-CAN-通信协议Arduino-Mega2560使用指南" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        C610 电调 CAN 通信协议Arduino Mega2560使用指南
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2025-08-01T07:39:25.000Z" itemprop="datePublished">2025-08-01</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+    未分类 
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            1.1k 词 
+          </div>
+        </div>
+        
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="C610电调CAN通信协议及使用指南"><a href="#C610电调CAN通信协议及使用指南" class="headerlink" title="C610电调CAN通信协议及使用指南"></a>C610电调CAN通信协议及使用指南</h1><h2 id="基本信息及资料"><a href="#基本信息及资料" class="headerlink" title="基本信息及资料"></a>基本信息及资料</h2><ul>
+<li><strong>通信协议</strong>：C610电调采用CAN通信协议</li>
+<li><strong>协议参考文档</strong>：40. CAN—通讯实验 — [野火]STM32 HAL库开发实战指南——基于H743_Pro_V</li>
+<li><strong>硬件适配</strong>：Arduino Mega2560无CAN差分信号引脚，需外接MCP2515（实现CAN差分信号与SPI信号转换）</li>
+<li><strong>推荐库</strong>：<a target="_blank" rel="noopener" href="https://github.com/autowp/arduino-mcp2515">GitHub - autowp&#x2F;arduino-mcp2515</a>（Arduino MCP2515 CAN接口库）</li>
+</ul>
+<h2 id="报文接收格式"><a href="#报文接收格式" class="headerlink" title="报文接收格式"></a>报文接收格式</h2><p>用于向电调发送控制指令控制电调的电流输出,两个标识符(0x200和0x1FF)各自对应 控制4个ID的电调。控制转矩电流值范围-10000-0-10000,对应电调输出的转矩电流 范围-10-0-10A。</p>
+<p>即0x200用于控制1-4号电调</p>
+<table>
+<thead>
+<tr>
+<th>数据域</th>
+<th>内容</th>
+<th>电调ID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DATA[0]</td>
+<td>控制电流值高8位</td>
+<td>1</td>
+</tr>
+<tr>
+<td>DATA[1]</td>
+<td>控制电流值低8位</td>
+<td>1</td>
+</tr>
+<tr>
+<td>DATA[2]</td>
+<td>控制电流值高8位</td>
+<td>2</td>
+</tr>
+<tr>
+<td>DATA[3]</td>
+<td>控制电流值低8位</td>
+<td>2</td>
+</tr>
+<tr>
+<td>DATA[4]</td>
+<td>控制电流值高8位</td>
+<td>3</td>
+</tr>
+<tr>
+<td>DATA[5]</td>
+<td>控制电流值低8位</td>
+<td>3</td>
+</tr>
+<tr>
+<td>DATA[6]</td>
+<td>控制电流值高8位</td>
+<td>4</td>
+</tr>
+<tr>
+<td>DATA[7]</td>
+<td>控制电流值低8位</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<p>0x1FF用于控制5-8号电调</p>
+<table>
+<thead>
+<tr>
+<th>数据域</th>
+<th>内容</th>
+<th>电调ID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DATA[0]</td>
+<td>控制电流值高8位</td>
+<td>5</td>
+</tr>
+<tr>
+<td>DATA[1]</td>
+<td>控制电流值低8位</td>
+<td>5</td>
+</tr>
+<tr>
+<td>DATA[2]</td>
+<td>控制电流值高8位</td>
+<td>6</td>
+</tr>
+<tr>
+<td>DATA[3]</td>
+<td>控制电流值低8位</td>
+<td>6</td>
+</tr>
+<tr>
+<td>DATA[4]</td>
+<td>控制电流值高8位</td>
+<td>7</td>
+</tr>
+<tr>
+<td>DATA[5]</td>
+<td>控制电流值低8位</td>
+<td>7</td>
+</tr>
+<tr>
+<td>DATA[6]</td>
+<td>控制电流值高8位</td>
+<td>8</td>
+</tr>
+<tr>
+<td>DATA[7]</td>
+<td>控制电流值低8位</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<h2 id="报文反馈格式"><a href="#报文反馈格式" class="headerlink" title="报文反馈格式"></a>报文反馈格式</h2><h3 id="数据域定义"><a href="#数据域定义" class="headerlink" title="数据域定义"></a>数据域定义</h3><table>
+<thead>
+<tr>
+<th>数据索引</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DATA[0]</td>
+<td>转子机械角度高8位</td>
+</tr>
+<tr>
+<td>DATA[1]</td>
+<td>转子机械角度低8位</td>
+</tr>
+<tr>
+<td>DATA[2]</td>
+<td>转子转速高8位</td>
+</tr>
+<tr>
+<td>DATA[3]</td>
+<td>转子转速低8位</td>
+</tr>
+<tr>
+<td>DATA[4]</td>
+<td>实际输出转矩高8位</td>
+</tr>
+<tr>
+<td>DATA[5]</td>
+<td>实际输出转矩低8位</td>
+</tr>
+<tr>
+<td>DATA[6]</td>
+<td>Null</td>
+</tr>
+<tr>
+<td>DATA[7]</td>
+<td>Null</td>
+</tr>
+</tbody></table>
+<p>接收数据时的CANID若为<code>0x201</code>则为ID为1的电调的数据，以此类推。<br>若是ID为<code>0x1FF+ID</code>则为ID为5-8的电调的数据。</p>
+<h3 id="关键参数"><a href="#关键参数" class="headerlink" title="关键参数"></a>关键参数</h3><ul>
+<li>发送频率：默认1KHz（可通过RoboMaster Assistant软件修改）</li>
+<li>转子机械角度范围：0<del>8191（对应物理角度0</del>360°）</li>
+<li>转子转速单位：rpm（转&#x2F;分钟）</li>
+</ul>
+<h2 id="高8位与低8位的理解"><a href="#高8位与低8位的理解" class="headerlink" title="高8位与低8位的理解"></a>高8位与低8位的理解</h2><p>C610电调中16位数据会拆分为高8位和低8位传输，具体说明如下：</p>
+<ol>
+<li><p><strong>数据拆分逻辑</strong>：<br>16位原始数据（如二进制<code>0011 0000 1100 0100</code>）拆分为：  </p>
+<ul>
+<li>高8位：<code>0011 0000</code>（通过16位数据右移8位获取：<code>原始数据 &gt;&gt; 8</code>）  </li>
+<li>低8位：<code>1100 0100</code>（直接截取原始数据的低8位）</li>
+</ul>
+</li>
+<li><p><strong>赋值方式</strong>：<br>高8位赋值给<code>DATA[n]</code>，低8位赋值给<code>DATA[n+1]</code>（如角度数据中，<code>DATA[0]</code>存高8位，<code>DATA[1]</code>存低8位）</p>
+</li>
+</ol>
+<h2 id="CAN数据包解析方法"><a href="#CAN数据包解析方法" class="headerlink" title="CAN数据包解析方法"></a>CAN数据包解析方法</h2><p>解析接收的CAN数据是拆分过程的逆操作，步骤如下：</p>
+<ol>
+<li>将高8位数据（如<code>DATA[0]</code>）转换为16位变量（自动补高位0，例：<code>0011 0000</code>→<code>0000 0000 0011 0000</code>）；  </li>
+<li>将高8位数据左移8位（例：<code>0000 0000 0011 0000 &lt;&lt; 8</code>→<code>0011 0000 0000 0000</code>）；  </li>
+<li>与低8位数据（如<code>DATA[1]</code>）相加，还原16位原始数据（例：<code>0011 0000 0000 0000 + 1100 0100</code>→<code>0011 0000 1100 0100</code>）；  </li>
+<li>转换为十进制输出即得目标数据。</li>
+</ol>
+<h2 id="示例程序"><a href="#示例程序" class="headerlink" title="示例程序"></a>示例程序</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;SPI.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mcp2515.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">can_frame</span> canMsg;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">can_frame</span> canMsg1;</span><br><span class="line"><span class="function">MCP2515 <span class="title">mcp2515</span><span class="params">(<span class="number">10</span>)</span></span>;  <span class="comment">// 初始化MCP2515，CS引脚为10</span></span><br><span class="line"></span><br><span class="line"><span class="type">int16_t</span> current = <span class="number">1000</span>;         <span class="comment">// 设定电流值</span></span><br><span class="line"><span class="type">int16_t</span> result_angle = <span class="number">0</span>;       <span class="comment">// 解析后的角度值</span></span><br><span class="line"><span class="type">int16_t</span> result_torque = <span class="number">0</span>;      <span class="comment">// 解析后的转矩值</span></span><br><span class="line"><span class="type">int16_t</span> result_speed = <span class="number">0</span>;       <span class="comment">// 解析后的转速值</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Serial.<span class="built_in">begin</span>(<span class="number">115200</span>);  <span class="comment">// 初始化串口通信</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 初始化MCP2515</span></span><br><span class="line">  mcp2515.<span class="built_in">reset</span>();</span><br><span class="line">  mcp2515.<span class="built_in">setBitrate</span>(CAN_1000KBPS, MCP_8MHZ);  <span class="comment">// 波特率1000KBPS，时钟8MHz</span></span><br><span class="line">  mcp2515.<span class="built_in">setNormalMode</span>();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 配置发送报文</span></span><br><span class="line">  canMsg1.can_id  = <span class="number">0x200</span>;       <span class="comment">// 报文ID</span></span><br><span class="line">  canMsg1.can_dlc = <span class="number">8</span>;           <span class="comment">// 数据长度8字节</span></span><br><span class="line">  <span class="comment">// 填充数据（高8位与低8位拆分）</span></span><br><span class="line">  canMsg1.data[<span class="number">0</span>] = (current &gt;&gt; <span class="number">8</span>);</span><br><span class="line">  canMsg1.data[<span class="number">1</span>] = current;</span><br><span class="line">  canMsg1.data[<span class="number">2</span>] = (current &gt;&gt; <span class="number">8</span>);</span><br><span class="line">  canMsg1.data[<span class="number">3</span>] = current;</span><br><span class="line">  canMsg1.data[<span class="number">4</span>] = (current &gt;&gt; <span class="number">8</span>);</span><br><span class="line">  canMsg1.data[<span class="number">5</span>] = current;</span><br><span class="line">  canMsg1.data[<span class="number">6</span>] = (current &gt;&gt; <span class="number">8</span>);</span><br><span class="line">  canMsg1.data[<span class="number">7</span>] = current;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 发送报文</span></span><br><span class="line">  mcp2515.<span class="built_in">sendMessage</span>(&amp;canMsg1);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 接收并解析报文</span></span><br><span class="line">  <span class="keyword">if</span> (mcp2515.<span class="built_in">readMessage</span>(&amp;canMsg) == MCP2515::ERROR_OK) &#123;</span><br><span class="line">    Serial.<span class="built_in">print</span>(canMsg.can_id, HEX);  <span class="comment">// 输出CAN ID（十六进制）</span></span><br><span class="line">    Serial.<span class="built_in">print</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">    Serial.<span class="built_in">print</span>(canMsg.can_dlc, HEX); <span class="comment">// 输出数据长度（十六进制）</span></span><br><span class="line">    Serial.<span class="built_in">print</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 解析转子转速（高8位左移8位+低8位）</span></span><br><span class="line">    Serial.<span class="built_in">print</span>(<span class="string">&quot;转子转速：&quot;</span>);</span><br><span class="line">    result_speed = ((<span class="type">uint16_t</span>)canMsg.data[<span class="number">2</span>] &lt;&lt; <span class="number">8</span>) + canMsg.data[<span class="number">3</span>];</span><br><span class="line">    Serial.<span class="built_in">print</span>(result_speed / <span class="number">36</span>, DEC);  <span class="comment">// 输出转速（十进制）</span></span><br><span class="line">    Serial.<span class="built_in">print</span>(<span class="string">&quot;; &quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left  disabled "
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2022/04/30/Makefile-%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/"
+      title="Makefile 入门：从基础到实用技巧"
+     >
+
+    <p class="title-text">
+      
+        Makefile 入门：从基础到实用技巧
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+ 
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2025 饭饭-Fantety<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+</body>
+</html>

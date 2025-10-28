@@ -60,10 +60,5 @@ include: null
 exclude: null
 ignore: null
 theme: vivia
-deploy:
-  type: git
-  repo: https://github.com/Fantety/fantety.github.io
-  # example, https://github.com/hexojs/hexojs.github.io
-  branch: gh-pages
 archive_generator:
   per_page: 0

@@ -42,9 +42,6 @@ avatar: /assets/head.jpg
 author: 饭饭-Fantety
 subtitle: 虽不能及 心向往之
 links:
-  - name: Twitter
-    icon: fa-brands fa-twitter      # Find icon codes at https://fontawesome.com/search
-    url: https://twitter.com
   - name: BiliBili
     icon: fa-brands fa-bilibili
     url: https://space.bilibili.com/87643009
