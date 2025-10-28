@@ -20,18 +20,13 @@ jobs:
                   # Examples: 20, 18.19, >=16.20.2, lts/Iron, lts/Hydrogen, *, latest, current, node
                   # Ref: https://github.com/actions/setup-node#supported-version-syntax
                   node-version: "20"
-            - name: Cache NPM dependencies
-              uses: actions/cache@v4
-              with:
-                  path: node_modules
-                  key: ${{ runner.OS }}-npm-cache
-                  restore-keys: |
-                      ${{ runner.OS }}-npm-cache
             - name: Install Dependencies
               run: npm install
-            - name: Rebuild native modules and build
+            - name: Build with clean environment
               run: |
-                npm rebuild
+                # Clean cache and rebuild
+                rm -rf db.json
+                node node_modules/hexo/bin/hexo clean
                 node node_modules/hexo/bin/hexo generate
             - name: Upload Pages artifact
               uses: actions/upload-pages-artifact@v3
