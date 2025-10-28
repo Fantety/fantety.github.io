@@ -29,9 +29,9 @@ jobs:
                       ${{ runner.OS }}-npm-cache
             - name: Install Dependencies
               run: npm install
-            - name: Fix permissions and build
+            - name: Rebuild native modules and build
               run: |
-                chmod +x node_modules/.bin/hexo
+                npm rebuild
                 node node_modules/hexo/bin/hexo generate
             - name: Upload Pages artifact
               uses: actions/upload-pages-artifact@v3
